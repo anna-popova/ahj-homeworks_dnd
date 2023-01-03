@@ -25,7 +25,7 @@ for (const link of addCardLinks) {
       //создаем новый элемент
       const li = document.createElement('li');
       li.className = 'card';
-      li.innerHTML = `<p>${addCardText.value}</p><button class="delete-button" type="button"></button>`;
+      li.innerHTML = `${addCardText.value}<button class="delete-button" type="button"></button>`;
 
       //вставляем новый элемент в соответствующий список
       link.before(li);
@@ -59,4 +59,43 @@ for (const card of cards) {
 };
 
 //!перемещение карточки
+const lists = document.querySelectorAll('.list');
+const card = document.querySelector('.card');
+let actualElement;
 
+const onMouseOver = (e) => {
+  const closest = document.elementFromPoint(e.clientX, e.clientY);
+  const { top } = closest.getBoundingClientRect();
+
+  if (closest.classList.contains('card')) {
+    if (e.pageY > window.scrollY + top + closest.offsetHeight / 2) {
+      closest.closest('.list').insertBefore(actualElement, closest.nextElementSibling);
+    } else {
+      closest.closest('.list').insertBefore(actualElement, closest);
+    }
+  } else if (closest.classList.contains('list')) {
+    closest.append(actualElement);
+  }
+};
+
+const onMouseUp = (e) => {
+  actualElement.classList.remove('gragged');
+
+  actualElement = undefined;
+
+  document.documentElement.removeEventListener('mouseup', onMouseUp);
+  document.documentElement.removeEventListener('mouseover', onMouseOver);
+};
+
+for (const list of lists) {
+  list.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+
+    actualElement = e.target;
+    
+    actualElement.classList.add('gragged');
+
+    document.documentElement.addEventListener('mouseup', onMouseUp);
+    document.documentElement.addEventListener('mouseover', onMouseOver);
+  });
+};

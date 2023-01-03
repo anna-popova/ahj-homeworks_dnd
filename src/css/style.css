@@ -77,6 +77,16 @@ body {
   margin-bottom: 0;
 }
 
+.card.gragged {
+  position: absolute;
+  max-width: 250px;
+  border: 1px solid;
+  pointer-events: none;
+  cursor: grabbing;
+  transform: skew(-5deg, 5deg);
+  z-index: 999;
+}
+
 .delete-button {
   position: absolute; 
   top: 5px; 
