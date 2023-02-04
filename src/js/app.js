@@ -26,49 +26,41 @@ function restore() {
 
 	const data = JSON.parse(json);
 
-	//console.log(data.arr);
-  const todoCardsLength = data.arr[0].todoCards.length;
+  const todoCardsLength = data.arr[0].length;
 	//console.log(todoCardsLength);
-  const progressCardsLength = data.arr[0].progressCards.length;
+  const progressCardsLength = data.arr[1].length;
   //console.log(progressCardsLength);
-  const doneCardsLength = data.arr[0].doneCards.length;
+  const doneCardsLength = data.arr[2].length;
   //console.log(doneCardsLength);
 
-  //TODO: stop here.
-
 	for (let i = 0; i < todoCardsLength; i++) {
-    //console.log(data.arr[0].todoCards[i].text);
-
+    //console.log(data.arr[0][i].text);
     const todoCardList = document.querySelector('.todo-card-list');
 
-    addNewCard(data.arr[0].todoCards[i].text, todoCardList);
+    addNewCard(data.arr[0][i].text, todoCardList);
 
     todoCards.push({
-      text: data.arr[0].todoCards[i].text,
+      text: data.arr[0][i].text,
     })
   }
 
   for (let i = 0; i < progressCardsLength; i++) {
-    //console.log(data.arr[0].progressCards[i].text);
-
     const progressCardList = document.querySelector('.progress-card-list');
 
-    addNewCard(data.arr[0].progressCards[i].text, progressCardList);
+    addNewCard(data.arr[1][i].text, progressCardList);
 
     progressCards.push({
-      text: data.arr[0].progressCards[i].text,
+      text: data.arr[1][i].text,
     })
   }
 
   for (let i = 0; i < doneCardsLength; i++) {
-    //console.log(data.arr[0].doneCards[i].text);
-
     const doneCardList = document.querySelector('.done-card-list');
 
-    addNewCard(data.arr[0].doneCards[i].text, doneCardList);
+    addNewCard(data.arr[2][i].text, doneCardList);
 
     doneCards.push({
-      text: data.arr[0].doneCards[i].text,
+      text: data.arr[2][i].text,
     })
   }
 }
@@ -76,6 +68,9 @@ function restore() {
 window.onload = function() {
 	//console.log(doneCards);
 	restore();
+
+  const cards = Array.from(document.querySelectorAll('.card'));
+  //console.log(cards);
 };
 
 //!добавляем новую карточку в список
@@ -106,7 +101,7 @@ for (const link of addCardLinks) {
         const postText = textarea.value;
         //console.log(postText);
 
-        addNewCard(postText, cardList);
+        const newCard = addNewCard(postText, cardList);
 
         addCardsToArray(parentList, postText);
 
@@ -120,34 +115,38 @@ for (const link of addCardLinks) {
   });
 }
 
-allCards.push({
-  todoCards: todoCards,
-  progressCards: progressCards,
-  doneCards: doneCards,
-})
+allCards.push(
+  todoCards,
+  progressCards,
+  doneCards,
+);
 
 //console.log(allCards);
 
 function addNewCard(text, parentList) {
   const li = document.createElement('li');
   li.className = 'card';
+  li.id = getUniqueID();
   li.innerHTML = `<p>${text}</p>
                   <button class="delete-button" type="button"></button>`;
   parentList.prepend(li);
 }
 
-function addCardsToArray(list, text) {
+function addCardsToArray(list, text, id) {
   if (list.classList.contains('todo-list')) {
     todoCards.push({
       text,
+      id,
     })
   } else if (list.classList.contains('progress-list')) {
     progressCards.push({
       text,
+      id,
     })
   } else {
     doneCards.push({
       text,
+      id,
     })
   }
 
@@ -156,3 +155,7 @@ function addCardsToArray(list, text) {
   // console.log(doneCards);
 }
 
+function getUniqueID() {
+  for (let i = 0; i < 5; i++)
+    return Date.now() + ((Math.random() * 100000).toFixed());
+}
