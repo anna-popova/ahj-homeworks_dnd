@@ -79,7 +79,7 @@ for (const link of addCardLinks) {
     e.preventDefault();
 
     const parentList = link.closest('.list');
-    console.log(parentList);
+    //console.log(parentList);
     const cardList = parentList.querySelector('.card-list');
     //console.log(cardList);
     const textarea = parentList.querySelector('.textarea');
@@ -101,8 +101,11 @@ for (const link of addCardLinks) {
         const postText = textarea.value;
         //console.log(postText);
 
-        const newCard = addNewCard(postText, cardList);
+        addNewCard(postText, cardList);
 
+        //?вот здесь третьим аргументом надо передать id, который установили этому элементу
+        //?но как это сделать???
+        //?подскажите, пожалуйста, не могу понять:(
         addCardsToArray(parentList, postText);
 
         save(allCards);
