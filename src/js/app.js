@@ -37,30 +37,33 @@ function restore() {
     //console.log(data.arr[0][i].text);
     const todoCardList = document.querySelector(".todo-card-list");
 
-    addNewCard(data.arr[0][i].text, todoCardList);
+    addNewCard(data.arr[0][i].text, todoCardList, data.arr[0][i].id);
 
     todoCards.push({
       text: data.arr[0][i].text,
+      id: data.arr[0][i].id,
     });
   }
 
   for (let i = 0; i < progressCardsLength; i++) {
     const progressCardList = document.querySelector(".progress-card-list");
 
-    addNewCard(data.arr[1][i].text, progressCardList);
+    addNewCard(data.arr[1][i].text, progressCardList, data.arr[1][i].id);
 
     progressCards.push({
       text: data.arr[1][i].text,
+      id: data.arr[1][i].id,
     });
   }
 
   for (let i = 0; i < doneCardsLength; i++) {
     const doneCardList = document.querySelector(".done-card-list");
 
-    addNewCard(data.arr[2][i].text, doneCardList);
+    addNewCard(data.arr[2][i].text, doneCardList, data.arr[2][i].id);
 
     doneCards.push({
       text: data.arr[2][i].text,
+      id: data.arr[2][i].id
     });
   }
 }
@@ -101,12 +104,11 @@ for (const link of addCardLinks) {
         const postText = textarea.value;
         //console.log(postText);
 
-        addNewCard(postText, cardList);
+        const newId = getUniqueID();
 
-        //?вот здесь третьим аргументом надо передать id, который установили этому элементу
-        //?но как это сделать???
-        //?подскажите, пожалуйста, не могу понять:(
-        addCardsToArray(parentList, postText);
+        addNewCard(postText, cardList, newId);
+
+        addCardsToArray(parentList, postText, newId);
 
         save(allCards);
 
@@ -119,13 +121,12 @@ for (const link of addCardLinks) {
 }
 
 allCards.push(todoCards, progressCards, doneCards);
-
 //console.log(allCards);
 
-function addNewCard(text, parentList) {
+function addNewCard(text, parentList, id) {
   const li = document.createElement("li");
   li.className = "card";
-  li.id = getUniqueID();
+  li.id = id;
   li.innerHTML = `<p>${text}</p>
                   <button class="delete-button" type="button"></button>`;
   parentList.prepend(li);
