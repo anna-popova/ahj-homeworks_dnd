@@ -10,7 +10,7 @@ const todoCards = [];
 const progressCards = [];
 const doneCards = [];
 
-//!Серверную часть и загрузку также реализовывать не нужно, храните всё в памяти
+//!Хранение в localStorage
 function save(arr) {
   localStorage.editorData = JSON.stringify({
     arr,
@@ -74,9 +74,31 @@ window.onload = function () {
 
   const cards = Array.from(document.querySelectorAll(".card"));
   //console.log(cards);
+
+  //!удаляем карточку
+  for (const card of cards) {
+    card.addEventListener('mouseover', () => {
+      console.log(card);
+      console.log(card.id);
+
+      const id = card.id;
+
+      const deleteButton = card.querySelector('.delete-button');
+      deleteButton.classList.add('active');
+
+      deleteButton.addEventListener('click', () => {
+        //TODO stop here. удалить карточку из массива, который сохраняется в localStorage
+        card.remove();
+      })
+
+      card.addEventListener('mouseout', () => {
+        deleteButton.classList.remove('active');
+      })
+    })
+  }
 };
 
-//!добавляем новую карточку в список
+//!добавляем новую карточку
 for (const link of addCardLinks) {
   link.addEventListener("click", (e) => {
     e.preventDefault();
@@ -150,9 +172,9 @@ function addCardsToArray(list, text, id) {
     });
   }
 
-  // console.log(todoCards);
-  // console.log(progressCards);
-  // console.log(doneCards);
+  console.log(todoCards);
+  console.log(progressCards);
+  console.log(doneCards);
 }
 
 function getUniqueID() {

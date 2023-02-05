@@ -73,6 +73,10 @@ body {
   border-radius: 4px;
 }
 
+.card p {
+  width: fit-content;
+}
+
 .card:last-child {
   margin-bottom: 0;
 }
@@ -90,7 +94,7 @@ body {
 .delete-button {
   position: absolute; 
   top: 0; 
-  right: 5px;
+  right: 1px;
   width: 15px;
   height: 15px;
   align-items: center;
