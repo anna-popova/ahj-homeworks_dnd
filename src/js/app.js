@@ -1,183 +1,148 @@
-const container = document.querySelector(".container");
-const addCardLinks = Array.from(container.querySelectorAll(".add-card-link"));
-//console.log(addCardLinks);
-const lists = Array.from(container.querySelectorAll(".list"));
-//console.log(lists);
+//!извлечение из LocalStorage
+function restoreBoardFromLocalStorage() {
+  const boardState = JSON.parse(localStorage.getItem('boardState'));
 
-const allCards = [];
+  if (boardState) {
+    const columnsContainer = document.querySelector('.board');
+    columnsContainer.innerHTML = '';
 
-const todoCards = [];
-const progressCards = [];
-const doneCards = [];
+    boardState.forEach(column => {
+      const columnId = column.id;
+      const columnTitle = column.title;
+      const cards = column.cards;
 
-//!Хранение в localStorage
-function save(arr) {
-  localStorage.editorData = JSON.stringify({
-    arr,
-  });
-}
+      const columnTemplate = `
+        <div class="column" draggable="true" data-column-id="${columnId}">
+          <div class="column-header">
+            <h2>${columnTitle}</h2>
+            <a href="#" class="delete-column-link delete-icon">&times;</a>
+          </div>
+          <ul class="column-cards">
+            ${cards.map(card => `
+              <li class="card" draggable="true" data-card-id="${card.id}">
+                <input type="checkbox" id="delete-card" />
+                <label for="delete-card" class="delete-icon">&#x2715;</label>
+                <p>${card.content}</p>
+              </li>
+            `).join('')}
+            <li class="add-card-link">
+              <a href="#">+ Add another card</a>
+              <div class="add-card-section visually-hidden">
+                <textarea class="textarea" rows="3"></textarea>
+                <div class="add-card-actions">
+                  <button class="add-card-btn btn btn-success">Add card</button>
+                  <button class="cancel-card-btn btn btn-danger">Cancel</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      `;
 
-function restore() {
-  const json = localStorage.editorData;
-
-  if (!json) {
-    return;
-  }
-
-  const data = JSON.parse(json);
-
-  const todoCardsLength = data.arr[0].length;
-  //console.log(todoCardsLength);
-  const progressCardsLength = data.arr[1].length;
-  //console.log(progressCardsLength);
-  const doneCardsLength = data.arr[2].length;
-  //console.log(doneCardsLength);
-
-  for (let i = 0; i < todoCardsLength; i++) {
-    //console.log(data.arr[0][i].text);
-    const todoCardList = document.querySelector(".todo-card-list");
-
-    addNewCard(data.arr[0][i].text, todoCardList, data.arr[0][i].id);
-
-    todoCards.push({
-      text: data.arr[0][i].text,
-      id: data.arr[0][i].id,
-    });
-  }
-
-  for (let i = 0; i < progressCardsLength; i++) {
-    const progressCardList = document.querySelector(".progress-card-list");
-
-    addNewCard(data.arr[1][i].text, progressCardList, data.arr[1][i].id);
-
-    progressCards.push({
-      text: data.arr[1][i].text,
-      id: data.arr[1][i].id,
-    });
-  }
-
-  for (let i = 0; i < doneCardsLength; i++) {
-    const doneCardList = document.querySelector(".done-card-list");
-
-    addNewCard(data.arr[2][i].text, doneCardList, data.arr[2][i].id);
-
-    doneCards.push({
-      text: data.arr[2][i].text,
-      id: data.arr[2][i].id
+      columnsContainer.insertAdjacentHTML('beforeend', columnTemplate);
     });
   }
 }
 
 window.onload = function () {
-  //console.log(doneCards);
-  restore();
+  restoreBoardFromLocalStorage();
+}
 
-  const cards = Array.from(document.querySelectorAll(".card"));
-  //console.log(cards);
+//!добавление новой карточки
+const addCardLink = document.querySelectorAll('.add-card-link');
+console.log(addCardLink);
+const addCardSection = document.querySelectorAll('.add-card-section');
+console.log(addCardSection);
 
-  //!удаляем карточку
-  for (const card of cards) {
-    card.addEventListener('mouseover', () => {
-      console.log(card);
-      console.log(card.id);
+addCardLink.forEach((link, index) => {
+  link.addEventListener('click', () => {
+    addCardSection[index].classList.remove('visually-hidden');
+  });
+});
 
-      const id = card.id;
+document.addEventListener('DOMContentLoaded', () => {
+  const addCardButtons = document.querySelectorAll('.add-card-button');
+  const cancelCardButtons = document.querySelectorAll('.cancel-card-button');
 
-      const deleteButton = card.querySelector('.delete-button');
-      deleteButton.classList.add('active');
+  addCardButtons.forEach(button => {
+    button.addEventListener('click', handleAddCardButtonClick);
+  });
 
-      deleteButton.addEventListener('click', () => {
-        //TODO stop here. удалить карточку из массива, который сохраняется в localStorage
-        card.remove();
-      })
+  cancelCardButtons.forEach(button => {
+    button.addEventListener('click', handleCancelCardButtonClick);
+  });
+});
 
-      card.addEventListener('mouseout', () => {
-        deleteButton.classList.remove('active');
-      })
-    })
+function handleAddCardButtonClick(event) {
+  const addCardSection = event.target.parentElement;
+  const textarea = addCardSection.querySelector('.textarea');
+  const cardContent = textarea.value.trim();
+  const column = event.target.closest('.column');
+  const columnCardsList = column.querySelector('.column-cards');
+
+  if (cardContent) {
+    const cardId = getRandomId();
+    const cardTemplate = `
+      <div class="card" draggable="true" data-card-id="${cardId}">
+        <input type="checkbox" id="delete-card" />
+        <label for="delete-card" class="delete-icon">&#x2715;</label>
+        <p>${cardContent}</p>
+      </div>
+    `;
+
+    columnCardsList.insertAdjacentHTML('beforeend', cardTemplate);
+
+    updateLocalStorage();
+
+    textarea.value = '';
+    addCardSection.classList.add('visually-hidden');
   }
-};
+}
 
-//!добавляем новую карточку
-for (const link of addCardLinks) {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
+//!функция для создания рандомного id карточки
+function getRandomId() {
+  return Math.floor(Math.random() * 1000000);
+}
 
-    const parentList = link.closest(".list");
-    //console.log(parentList);
-    const cardList = parentList.querySelector(".card-list");
-    //console.log(cardList);
-    const textarea = parentList.querySelector(".textarea");
+//!функция для нажатия на кнопку cancel-card-button
+function handleCancelCardButtonClick(event) {
+  const addCardSection = event.target.parentElement;
+  const textarea = addCardSection.querySelector('.textarea');
 
-    const addCardAction = parentList.querySelector(".add-card-action");
-    addCardAction.classList.remove("visually-hidden");
+  textarea.value = '';
+  addCardSection.classList.add('visually-hidden');
+}
 
-    const cancelCardButton = parentList.querySelector(".cancel-card-button");
+//!добавление и обновление LocalStorage
+function updateLocalStorage() {
+  const columns = document.querySelectorAll('.column');
 
-    cancelCardButton.addEventListener("click", () => {
-      addCardAction.classList.add("visually-hidden");
-      textarea.value = "";
+  const boardState = [];
+
+  columns.forEach(column => {
+    const columnId = column.dataset.columnId;
+    const columnTitle = column.querySelector('h2').textContent.trim();
+
+    const cards = [];
+
+    column.querySelectorAll('.card').forEach(card => {
+      const cardId = card.dataset.cardId;
+      console.log(cardId);
+      const cardContent = card.querySelector('p').textContent.trim();
+      console.log(cardContent);
+
+      cards.push({
+        id: cardId,
+        content: cardContent
+      });
     });
 
-    const addCardButton = parentList.querySelector(".add-card-button");
-
-    addCardButton.addEventListener("click", () => {
-      if (textarea.value !== "") {
-        const postText = textarea.value;
-        //console.log(postText);
-
-        const newId = getUniqueID();
-
-        addNewCard(postText, cardList, newId);
-
-        addCardsToArray(parentList, postText, newId);
-
-        save(allCards);
-
-        textarea.value = "";
-
-        addCardAction.classList.add("visually-hidden");
-      }
+    boardState.push({
+      id: columnId,
+      title: columnTitle,
+      cards: cards
     });
   });
-}
 
-allCards.push(todoCards, progressCards, doneCards);
-//console.log(allCards);
-
-function addNewCard(text, parentList, id) {
-  const li = document.createElement("li");
-  li.className = "card";
-  li.id = id;
-  li.innerHTML = `<p>${text}</p>
-                  <button class="delete-button" type="button"></button>`;
-  parentList.prepend(li);
-}
-
-function addCardsToArray(list, text, id) {
-  if (list.classList.contains("todo-list")) {
-    todoCards.push({
-      text,
-      id,
-    });
-  } else if (list.classList.contains("progress-list")) {
-    progressCards.push({
-      text,
-      id,
-    });
-  } else {
-    doneCards.push({
-      text,
-      id,
-    });
-  }
-
-  console.log(todoCards);
-  console.log(progressCards);
-  console.log(doneCards);
-}
-
-function getUniqueID() {
-  for (let i = 0; i < 5; i++)
-    return Date.now() + (Math.random() * 100000).toFixed();
+  localStorage.setItem('boardState', JSON.stringify(boardState));
 }

@@ -15,8 +15,13 @@ a {
 }
 
 button {
+  font-family: "Open Sans", "Arial", sans-serif;
   border: none;
   cursor: pointer; 
+}
+
+h2 {
+  margin-bottom: 10px;
 }
 
 .visually-hidden {
@@ -40,93 +45,56 @@ body {
   background-color: #35385a;
 }
 
-.container {
+.board {
   display: flex;
+  align-items: flex-start;
   padding: 20px;
 }
 
-.list {
-  width: 32%;
-  height: 100%;
+.column {
+  display: inline-block;
+  vertical-align: top;
+  width: 300px;
+  background-color: #f5f5f5;
   margin-right: 20px;
   padding: 10px;
-  background-color: rgb(198, 204, 204);
-  border-radius: 4px;
-}
-
-.list:last-child {
-  margin-right: 0;
-}
-
-.list-title {
-  margin-left: 10px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
+  border-radius: 5px;
 }
 
 .card {
   position: relative;
-  padding: 10px 20px 10px 10px;
+  background-color: #fff;
+  padding: 10px;
   margin-bottom: 10px;
-  font-size: 13px;
-  background-color: white;
-  border-radius: 4px;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 2px rgba(0,0,0,.05), 0 4px 4px rgba(0,0,0,.05), 0 8px 8px rgba(0,0,0,.05), 0 16px 16px rgba(0,0,0,.05);
 }
 
-.card p {
-  width: fit-content;
-}
-
-.card:last-child {
-  margin-bottom: 0;
-}
-
-.card.gragged {
+.delete-icon {
+  display: none;
   position: absolute;
-  max-width: 250px;
-  border: 1px solid;
-  pointer-events: none;
-  cursor: grabbing;
-  transform: skew(-5deg, 5deg);
-  z-index: 999;
+  top: 5px;
+  right: 5px;
+  font-family: "Segoe MDL2 Assets";
+  cursor: pointer;
+  font-size: 18px;
+  color: #ccc;
 }
 
-.delete-button {
-  position: absolute; 
-  top: 0; 
-  right: 1px;
-  width: 15px;
-  height: 15px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  background-color: transparent;
+.card:hover .delete-icon {
+  display: block;
+}
 
+input[type="checkbox"] {
   display: none;
 }
 
-.delete-button.active {
-  display: flex;
+input[type="checkbox"]:checked + p {
+  display: none;
 }
 
-.delete-button:hover {
-  background-color: rgba(128, 128, 128, 0.2);
-}
-
-.delete-button:before, .delete-button:after {
-  content: ""; 
-  position: absolute; 
-  width: 9px; 
-  height: 1px; 
-  background: #1e2a31;
-}
-
-.delete-button:before {
-  transform: rotate(45deg);
-}
-
-.delete-button:after {
-  transform: rotate(-45deg);
+input[type="checkbox"]:checked + .delete-icon {
+  display: none;
 }
 
 .add-card-section {
@@ -187,7 +155,7 @@ body {
   position: relative;
   width: 20px;
   height: 20px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;

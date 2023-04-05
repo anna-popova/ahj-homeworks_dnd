@@ -4,73 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Segoe+MDL2+Assets" rel="stylesheet">
   <title>Trello</title>
 </head>
 
 <body>
-  <h1 class="visually-hidden">Trello</h1>
+  <div class="board">
+    <h1 class="visually-hidden">Trello</h1>
 
-  <div class="container">
+    <div class="column" data-column-id="1">
+      <h2>todo</h2>
 
-    <div class="list todo-list">
-      <h3 class="list-title">todo</h3>
-
-      <ul class="card-list todo-card-list"></ul>
-
-      <div class="add-card-section">
-        <a class="add-card-link">+ Add another card</a>
-
-        <div class="add-card-action visually-hidden">
-          <textarea class="textarea"></textarea>
-
-          <div class="card-buttons-area">
-            <button type="button" class="add-card-button">Add Card</button>
-            <button type="button" class="cancel-card-button"></button>
-          </div>
+      <ul class="column-cards">
+        <div class="card" draggable="true" data-card-id="1">
+          <input type="checkbox" id="delete-card" />
+          <label for="delete-card" class="delete-icon">&#x2715;</label>
+          <p>Начальняа картока для примера</p>
         </div>
+      </ul>
+
+      <a class="add-card-link">+ Add another card</a>
+
+      <div class="add-card-section visually-hidden">
+        <textarea class="textarea"></textarea>
+
+        <button type="button" class="add-card-button">Add Card</button>
+        <button type="button" class="cancel-card-button"></button>
       </div>
     </div>
 
+    <div class="column" data-column-id="2">
+      <h2>in progress</h2>
 
-    <div class="list progress-list">
-      <h3  class="list-title">in progress</h3>
+      <ul class="column-cards">
+      </ul>
 
-      <ul class="card-list progress-card-list"></ul>
+      <a class="add-card-link">+ Add another card</a>
 
-      <div class="add-card-section">
-        <a class="add-card-link">+ Add another card</a>
+      <div class="add-card-section visually-hidden">
+        <textarea class="textarea"></textarea>
 
-        <div class="add-card-action visually-hidden">
-          <textarea class="textarea"></textarea>
-
-          <div class="card-buttons-area">
-            <button type="button" class="add-card-button">Add Card</button>
-            <button type="button" class="cancel-card-button"></button>
-          </div>
-        </div>
+        <button type="button" class="add-card-button">Add Card</button>
+        <button type="button" class="cancel-card-button"></button>
       </div>
     </div>
 
+    <div class="column" data-column-id="3">
+      <h2>done</h2>
 
-    <div class="list done-list">
-      <h3  class="list-title">done</h3>
+      <ul class="column-cards">
+      </ul>
 
-      <ul class="card-list done-card-list"></ul>
+      <a class="add-card-link">+ Add another card</a>
 
-      <div class="add-card-section">
-        <a class="add-card-link">+ Add another card</a>
+      <div class="add-card-section visually-hidden">
+        <textarea class="textarea"></textarea>
 
-        <div class="add-card-action visually-hidden">
-          <textarea class="textarea"></textarea>
-
-          <div class="card-buttons-area">
-            <button type="button" class="add-card-button">Add Card</button>
-            <button type="button" class="cancel-card-button"></button>
-          </div>
-        </div>
+        <button type="button" class="add-card-button">Add Card</button>
+        <button type="button" class="cancel-card-button"></button>
       </div>
     </div>
-
   </div>
 </body>
 </html>
