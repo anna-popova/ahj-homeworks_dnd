@@ -70,7 +70,7 @@ body {
   box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 2px rgba(0,0,0,.05), 0 4px 4px rgba(0,0,0,.05), 0 8px 8px rgba(0,0,0,.05), 0 16px 16px rgba(0,0,0,.05);
 }
 
-.delete-icon {
+.delete-card-button {
   display: none;
   position: absolute;
   top: 5px;
@@ -79,22 +79,14 @@ body {
   cursor: pointer;
   font-size: 18px;
   color: #ccc;
+
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
 }
 
-.card:hover .delete-icon {
+.card:hover .delete-card-button {
   display: block;
-}
-
-input[type="checkbox"] {
-  display: none;
-}
-
-input[type="checkbox"]:checked + p {
-  display: none;
-}
-
-input[type="checkbox"]:checked + .delete-icon {
-  display: none;
 }
 
 .add-card-section {
