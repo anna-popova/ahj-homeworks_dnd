@@ -22,7 +22,7 @@ export default function restoreBoardFromLocalStorage() {
             ${cards.map(card => `
               <li class="card" draggable="true" data-card-id="${card.id}">
               <button type="button" class="delete-card-button">&#x2715;</button>
-                <p>${card.content}</p>
+                <p class="card-text">${card.content}</p>
               </li>
             `).join('')}
           </ul>

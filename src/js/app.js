@@ -33,7 +33,7 @@ columnsContainer.addEventListener('click', (e) => {
           const cardTemplate = `
             <div class="card" draggable="true" data-card-id="${cardId}">
             <button type="button" class="delete-card-button">&#x2715;</button>
-              <p>${cardContent}</p>
+              <p class="card-text">${cardContent}</p>
             </div>
           `;
 
@@ -64,3 +64,28 @@ columnsContainer.addEventListener('click', (e) => {
     }
   })
 })
+
+//!перетаскивание карточек
+columnsContainer.addEventListener('dragstart', (e) => {
+  console.log(e.target);
+  e.target.classList.add('selected');
+})
+
+columnsContainer.addEventListener('dragend', (e) => {
+  e.target.classList.remove('selected');
+
+  document.body.style.cursor = '';
+});
+
+columnsContainer.addEventListener('dragover', (e) => {
+  e.preventDefault();
+
+  document.body.style.cursor = 'grabbing';
+
+  const activeElement = columnsContainer.querySelector('.selected');
+  const currentElement = e.target;
+
+  if (currentElement.classList.contains('column-cards') && activeElement !== currentElement) {
+
+  }
+});
