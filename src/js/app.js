@@ -66,26 +66,52 @@ columnsContainer.addEventListener('click', (e) => {
 })
 
 //!перетаскивание карточек
-columnsContainer.addEventListener('dragstart', (e) => {
-  console.log(e.target);
-  e.target.classList.add('selected');
-})
+//const columnsContainer = document.querySelector('.board');
 
-columnsContainer.addEventListener('dragend', (e) => {
-  e.target.classList.remove('selected');
+let actualElement;
 
-  document.body.style.cursor = '';
-});
+const onMouseOver = (e) => {
+	//console.log(e);
 
-columnsContainer.addEventListener('dragover', (e) => {
-  e.preventDefault();
+	actualElement.style.top = e.clientY + 'px';
+	actualElement.style.left = e.clientX + 'px';
+};
 
-  document.body.style.cursor = 'grabbing';
+const onMouseUp = (e) => {
+	const mouseUpCard = e.target.closest('.card');
+	console.log(mouseUpCard);
+	const mouseUpColumn = e.target.closest('.column');
+  //console.log(mouseUpColumn);
 
-  const activeElement = columnsContainer.querySelector('.selected');
-  const currentElement = e.target;
+  //mouseUpColumn.insertBefore(actualElement, mouseUpCard);
+  mouseUpCard.insertAdjacentElement('afterend', actualElement);
 
-  if (currentElement.classList.contains('column-cards') && activeElement !== currentElement) {
+  actualElement.classList.remove('dragged');
 
+  actualElement = undefined;
+
+  document.documentElement.removeEventListener('mouseup', onMouseUp);
+  document.documentElement.removeEventListener('mouseover', onMouseOver);
+};
+
+columnsContainer.addEventListener('mousedown', (e) => {
+  if (e.target.classList.contains('card') || e.target.classList.contains('card-text')) {
+    e.preventDefault();
+
+    actualElement = e.target;
+
+    if (e.target.classList.contains('card-text')) {
+      actualElement = e.target.closest('.card');
+    }
+
+    //console.log(actualElement);
+  
+    const width = e.target.closest('.card').offsetWidth;
+  
+    actualElement.classList.add('dragged');
+    actualElement.style.width = width + 'px';
+  
+    document.documentElement.addEventListener('mouseup', onMouseUp);
+    document.documentElement.addEventListener('mouseover', onMouseOver);
   }
 });
