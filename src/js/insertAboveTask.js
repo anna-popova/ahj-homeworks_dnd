@@ -1,7 +1,7 @@
 //!функция для определения позиции перетаскивания карточки
 
 export default function insertAboveTask(zone, mouseY) {
-  const notActualElements = zone.querySelectorAll('.card:not(.is-dragging)');
+  const notActualElements = zone.querySelectorAll(".card:not(.is-dragging)");
   //console.log(notActualElements);
 
   let closestCard = null;
