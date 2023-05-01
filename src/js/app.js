@@ -92,6 +92,8 @@ columnsContainer.addEventListener('dragstart', (e) => {
       } else {
         zone.insertBefore(curCard, bottomCard);
       }
+
+      updateLocalStorage();
     });
   });
 });
@@ -99,63 +101,3 @@ columnsContainer.addEventListener('dragstart', (e) => {
 columnsContainer.addEventListener('dragend', () => {
   actualElement.classList.remove('is-dragging');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let actualElement;
-
-// const onMouseOver = (e) => {
-// 	//console.log(e);
-
-// 	actualElement.style.top = e.clientY + 'px';
-// 	actualElement.style.left = e.clientX + 'px';
-// };
-
-// const onMouseUp = (e) => {
-// 	const mouseUpCard = e.target.closest('.card');
-// 	console.log(mouseUpCard);
-// 	const mouseUpColumn = e.target.closest('.column');
-//   //console.log(mouseUpColumn);
-
-//   //mouseUpColumn.insertBefore(actualElement, mouseUpCard);
-//   mouseUpCard.insertAdjacentElement('afterend', actualElement);
-
-//   actualElement.classList.remove('dragged');
-
-//   actualElement = undefined;
-
-//   document.documentElement.removeEventListener('mouseup', onMouseUp);
-//   document.documentElement.removeEventListener('mouseover', onMouseOver);
-// };
-
-// columnsContainer.addEventListener('mousedown', (e) => {
-//   if (e.target.classList.contains('card') || e.target.classList.contains('card-text')) {
-//     e.preventDefault();
-
-//     actualElement = e.target;
-
-//     if (e.target.classList.contains('card-text')) {
-//       actualElement = e.target.closest('.card');
-//     }
-
-//     //console.log(actualElement);
-  
-//     const width = e.target.closest('.card').offsetWidth;
-  
-//     actualElement.classList.add('dragged');
-//     actualElement.style.width = width + 'px';
-  
-//     document.documentElement.addEventListener('mouseup', onMouseUp);
-//     document.documentElement.addEventListener('mouseover', onMouseOver);
-//   }
-// });
