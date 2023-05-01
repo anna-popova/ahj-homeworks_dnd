@@ -1,6 +1,7 @@
 import getRandomId from "../js/getRandomId";
 import updateLocalStorage from "../js/updateLocalStorage";
 import restoreBoardFromLocalStorage from "../js/restoreBoardFromLocalStorage";
+import insertAboveTask from "./insertAboveTask";
 
 window.onload = function () {
   restoreBoardFromLocalStorage();
@@ -66,52 +67,95 @@ columnsContainer.addEventListener('click', (e) => {
 })
 
 //!перетаскивание карточек
-//const columnsContainer = document.querySelector('.board');
-
 let actualElement;
 
-const onMouseOver = (e) => {
-	//console.log(e);
+columnsContainer.addEventListener('dragstart', (e) => {
+  actualElement = e.target;
+  //console.log(actualElement);
 
-	actualElement.style.top = e.clientY + 'px';
-	actualElement.style.left = e.clientX + 'px';
-};
+  actualElement.classList.add('is-dragging');
 
-const onMouseUp = (e) => {
-	const mouseUpCard = e.target.closest('.card');
-	console.log(mouseUpCard);
-	const mouseUpColumn = e.target.closest('.column');
-  //console.log(mouseUpColumn);
+  const droppables = document.querySelectorAll('.column-cards');
+  //console.log(droppables);
 
-  //mouseUpColumn.insertBefore(actualElement, mouseUpCard);
-  mouseUpCard.insertAdjacentElement('afterend', actualElement);
+  droppables.forEach((zone) => {
+    zone.addEventListener('dragover', (e) => {
+      //console.log(e);
+      e.preventDefault();
 
-  actualElement.classList.remove('dragged');
+      const bottomCard = insertAboveTask(zone, e.clientY);
+      //console.log(bottomCard);
+      const curCard = document.querySelector('.is-dragging');
 
-  actualElement = undefined;
-
-  document.documentElement.removeEventListener('mouseup', onMouseUp);
-  document.documentElement.removeEventListener('mouseover', onMouseOver);
-};
-
-columnsContainer.addEventListener('mousedown', (e) => {
-  if (e.target.classList.contains('card') || e.target.classList.contains('card-text')) {
-    e.preventDefault();
-
-    actualElement = e.target;
-
-    if (e.target.classList.contains('card-text')) {
-      actualElement = e.target.closest('.card');
-    }
-
-    //console.log(actualElement);
-  
-    const width = e.target.closest('.card').offsetWidth;
-  
-    actualElement.classList.add('dragged');
-    actualElement.style.width = width + 'px';
-  
-    document.documentElement.addEventListener('mouseup', onMouseUp);
-    document.documentElement.addEventListener('mouseover', onMouseOver);
-  }
+      if (!bottomCard) {
+        zone.appendChild(curCard);
+      } else {
+        zone.insertBefore(curCard, bottomCard);
+      }
+    });
+  });
 });
+
+columnsContainer.addEventListener('dragend', () => {
+  actualElement.classList.remove('is-dragging');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let actualElement;
+
+// const onMouseOver = (e) => {
+// 	//console.log(e);
+
+// 	actualElement.style.top = e.clientY + 'px';
+// 	actualElement.style.left = e.clientX + 'px';
+// };
+
+// const onMouseUp = (e) => {
+// 	const mouseUpCard = e.target.closest('.card');
+// 	console.log(mouseUpCard);
+// 	const mouseUpColumn = e.target.closest('.column');
+//   //console.log(mouseUpColumn);
+
+//   //mouseUpColumn.insertBefore(actualElement, mouseUpCard);
+//   mouseUpCard.insertAdjacentElement('afterend', actualElement);
+
+//   actualElement.classList.remove('dragged');
+
+//   actualElement = undefined;
+
+//   document.documentElement.removeEventListener('mouseup', onMouseUp);
+//   document.documentElement.removeEventListener('mouseover', onMouseOver);
+// };
+
+// columnsContainer.addEventListener('mousedown', (e) => {
+//   if (e.target.classList.contains('card') || e.target.classList.contains('card-text')) {
+//     e.preventDefault();
+
+//     actualElement = e.target;
+
+//     if (e.target.classList.contains('card-text')) {
+//       actualElement = e.target.closest('.card');
+//     }
+
+//     //console.log(actualElement);
+  
+//     const width = e.target.closest('.card').offsetWidth;
+  
+//     actualElement.classList.add('dragged');
+//     actualElement.style.width = width + 'px';
+  
+//     document.documentElement.addEventListener('mouseup', onMouseUp);
+//     document.documentElement.addEventListener('mouseover', onMouseOver);
+//   }
+// });
