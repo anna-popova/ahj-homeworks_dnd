@@ -69,11 +69,17 @@ columnsContainer.addEventListener("click", (e) => {
 //!перетаскивание карточек
 let actualElement;
 
+const body = document.querySelector('body');
+
 columnsContainer.addEventListener("dragstart", (e) => {
   actualElement = e.target;
   //console.log(actualElement);
 
   actualElement.classList.add("is-dragging");
+
+  // Устанавливаем курсор в режим "grabbing" во время перетаскивания
+  //actualElement.style.cursor = "grabbing";
+  //body.style.cursor = "grabbing";
 
   const droppables = document.querySelectorAll(".column-cards");
   //console.log(droppables);
@@ -100,4 +106,8 @@ columnsContainer.addEventListener("dragstart", (e) => {
 
 columnsContainer.addEventListener("dragend", () => {
   actualElement.classList.remove("is-dragging");
+
+  // Возвращаем курсор в режим "grab" после окончания перетаскивания
+  //actualElement.style.cursor = "grab";
+  //body.style.cursor = "grab";
 });
